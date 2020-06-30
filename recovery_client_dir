@@ -1,0 +1,56 @@
+#!/bin/bash
+
+while [ -n "$1" ]
+do
+case "$1" in
+	-id) client_id="$2"
+	esac
+	shift
+done
+
+echo $client_id
+
+if [ $client_id ]
+then
+
+	dir1="dir1/$client_id"
+	dir2="dir2/$client_id"
+
+
+	if [ -d $dir1 ]
+	then
+
+		echo "EXIST $dir1"
+		if [ ! -d $dir2 ]
+		then
+			mkdir $dir2
+		fi
+
+		for file in $dir1/*
+		do
+			mv $file $dir2
+		done
+
+		rmdir $dir1
+
+		sudo chown user:user -R $dir2
+		sudo chmod g+w -R $dir2
+
+		echo "Восстановление закончено: cd $dir2"
+
+
+	elif [ -d $dir2 ]
+	then
+
+		echo "DOSEN't EXIST $dir1"
+		echo "EXIST $dir2"
+
+	else
+
+		echo "DOSEN't EXIST $dir1"
+		echo "DOSEN't EXIST $dir2"
+
+	fi
+else
+	echo "Передайте значение в переменную -id"
+fi

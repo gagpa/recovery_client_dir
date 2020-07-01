@@ -1,5 +1,9 @@
 #!/bin/bash
 
+dir1="dir1"
+dir2="dir2"
+user=""
+
 while [ -n "$1" ]
 do
 case "$1" in
@@ -8,19 +12,16 @@ case "$1" in
 	shift
 done
 
-echo $client_id
 
 if [ $client_id ]
 then
-
-	dir1="dir1/$client_id"
-	dir2="dir2/$client_id"
-
-
+	dir1="$dir1/$client_id"
+	dir2="$dir2/$client_id"
+	echo $dir1
 	if [ -d $dir1 ]
 	then
 
-		echo "EXIST $dir1"
+		echo "Dir exist $dir1"
 		if [ ! -d $dir2 ]
 		then
 			mkdir $dir2
@@ -33,24 +34,22 @@ then
 
 		rmdir $dir1
 
-		sudo chown user:user -R $dir2
+		sudo chown $user:$user -R $dir2
 		sudo chmod g+w -R $dir2
-
-		echo "Восстановление закончено: cd $dir2"
-
+		echo "Recovery completed: cd $dir2"
 
 	elif [ -d $dir2 ]
 	then
 
-		echo "DOSEN't EXIST $dir1"
-		echo "EXIST $dir2"
+		echo "Dir dosen't exist $dir1"
+		echo "Exist $dir2"
 
 	else
 
-		echo "DOSEN't EXIST $dir1"
-		echo "DOSEN't EXIST $dir2"
+		echo "Dir dosen't exist $dir1"
+		echo "Dir dosen't exist $dir2"
 
 	fi
 else
-	echo "Передайте значение в переменную -id"
+	echo "-id didn't transfer"
 fi

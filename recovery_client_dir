@@ -1,9 +1,11 @@
 #!/bin/bash
 
-dir1="dir1"
-dir2="dir2"
+# main configs 
+cleint_dir="dir1"
+backup_dir="dir2"
 user=""
 
+# id args
 while [ -n "$1" ]
 do
 case "$1" in
@@ -15,41 +17,39 @@ done
 
 if [ $client_id ]
 then
-	dir1="$dir1/$client_id"
-	dir2="$dir2/$client_id"
-	echo $dir1
-	if [ -d $dir1 ]
+	client_dir="$client_dir/$client_id"
+	backup_dir="$backup_dir/$client_id"
+
+	if [ -d $cleint_dir ]
 	then
 
-		echo "Dir exist $dir1"
-		if [ ! -d $dir2 ]
-		then
-			mkdir $dir2
-		fi
+		echo "Client dir exist $client_dir"
+	else
+		echo "Client dir dosen't exist $cleint_dir"
 
-		for file in $dir1/*
+
+	if [ -d $backup_dir ]
+	then
+		echo "Backup dir exist $backup_dir"
+		
+		if [ ! -d $cleint_dir ]
+				then
+					mkdir $cleint_dir
+				fi
+
+		for file in $backup_dir/*
 		do
-			mv $file $dir2
+			mv $file $cleint_dir
 		done
-
-		rmdir $dir1
+		rmdir $backup_dir
 
 		sudo chown $user:$user -R $dir2
 		sudo chmod g+w -R $dir2
-		echo "Recovery completed: cd $dir2"
-
-	elif [ -d $dir2 ]
-	then
-
-		echo "Dir dosen't exist $dir1"
-		echo "Exist $dir2"
-
+		echo "Recovery completed: cd $cleint_dir"		
 	else
-
-		echo "Dir dosen't exist $dir1"
-		echo "Dir dosen't exist $dir2"
-
+		echo "Backup dir dosen't exist $backup_dir"
 	fi
+
 else
 	echo "-id didn't transfer"
 fi
